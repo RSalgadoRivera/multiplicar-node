@@ -1,34 +1,33 @@
 // requires
-const fs = require('fs');
-const colors = require('colors');
+const fs = require( 'fs' );
+require( 'colors' );
 
-let listarTabla = (base, limite) => {
-    console.log(`\n===Tabla de ${base}===\n`.green);
-    console.log(`${crearTabla(base, limite)}`.blue);
-    console.log(`======================`.green);
+let listarTabla = ( base, limite ) => {
+    console.log( `\n===Tabla del ${ base.toString().blue }\n`.green.bold );
+    console.log( `${ crearTabla( base, limite ) }`.rainbow );
+    console.log( `================`.green.bold);
 };
 
-let crearTabla = (base, limite) => {
+let crearTabla = ( base, limite ) => {
     let tabla = '';
 
-    for (let i = 1; i <= limite; i++) {
-        tabla += `${i} * ${base} = ${i * base}\n`;
-    }
+    [ ...Array( limite ).keys() ]
+    .map( ( i )=> tabla += `${ i + 1 } X ${ base } = ${ ( i + 1 ) * base  }\n` );
+
     return tabla;
 };
 
-let crearArchivo = (base, limite) => {
-    return new Promise((resolve, reject) => {
-        if (!Number(base)) {
-            reject(`${base} no es un número`);
+let crearArchivo = ( base, limite ) => {
+    return new Promise( ( resolve, reject ) => {
+        if ( !Number( base ) ) {
+            reject(`${ base } no es un número`);
             return;
         }
 
-        let data = crearTabla(base, limite);
+        let data = crearTabla( base, limite );
 
-        fs.writeFile(`tablas/tabla-${base}.txt`, data, err => {
-            if (err) reject(err);
-            else resolve(`tabla-${base}-al-${limite}.txt`);
+        fs.writeFile( `tablas/tabla-${ base }.txt`, data, err => {
+            err ? reject( err ) : resolve( `tabla-${ base }-al-${ limite }.txt` );
         });
     });
 };
